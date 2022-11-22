@@ -1,0 +1,157 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #d63939;
+  --primary-color-2: #982828;
+  --primary-color-3: #6a1e1e;
+  --primary-color-dark: #291212;
+  --white-color: #fff;
+}
+
+body {
+  background-color: var(--primary-color-dark);
+  color: var(--white-color);
+  font-family: "Open Sans", sans-serif;
+}
+
+.container {
+  display: grid;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+header {
+  display: grid;
+  gap: 2rem;
+  width: 100vw;
+}
+
+.video-container {
+  position: relative;
+  height: 40vh;
+  display: grid;
+  align-content: center;
+  box-shadow: 0 0 20px black;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  object-fit: cover;
+  z-index: 0;
+  filter: brightness(0.5) blur(5px);
+}
+
+.video-container .caption {
+  z-index: 1;
+  position: relative;
+  text-align: center;
+  color: #dc0000;
+  padding: 10px;
+  display: grid;
+  gap: 1rem;
+}
+
+h1 {
+  text-align: center;
+  color: var(--primary-color);
+  text-shadow: 0 0 10px black;
+}
+
+.search-container {
+  display: grid;
+  grid-auto-flow: column;
+  background-color: var(--white-color);
+  padding: 0.1rem;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.2s;
+  justify-self: center;
+}
+
+.search-container:hover,
+.search-container:focus {
+  box-shadow: 0px 0px 10px white;
+}
+
+#search-input {
+  font-size: 1.2rem;
+  transition: all 0.5s;
+  border-radius: 10px 0 0 10px;
+  outline: none;
+  padding: 0.5rem;
+  border: none;
+}
+
+#search-btn {
+  transition: all 0.5s;
+  border-radius: 0 10px 10px 0;
+}
+
+#search-input:focus,
+#search-input:focus ~ #search-btn {
+  background-color: var(--primary-color-3);
+}
+
+.music-container {
+  display: grid;
+  gap: 0.5rem;
+  background-color: var(--primary-color-dark);
+  min-width: 30vw;
+}
+
+.song {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: max-content 1fr min-content;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.song__btn {
+  padding: 0.1rem 2rem 0.1rem 2rem !important;
+}
+
+.btn {
+  /* Ripple effect*/
+  position: relative;
+  overflow: hidden;
+  transition: background 400ms;
+
+  text-decoration: none;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  padding: 0.5rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.btn:hover {
+  background-color: var(--primary-color-2) !important;
+}
+
+/* Ripple effect */
+span.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 300ms linear;
+  background-color: var(--primary-color-dark);
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
