@@ -94,7 +94,6 @@ h1 {
 }
 
 #search-btn {
-  transition: all 0.5s;
   border-radius: 0 10px 10px 0;
 }
 
@@ -118,16 +117,16 @@ h1 {
   align-items: center;
 }
 
+.song__artist {
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
 .song__btn {
   padding: 0.1rem 2rem 0.1rem 2rem !important;
 }
 
 .btn {
-  /* Ripple effect*/
-  position: relative;
-  overflow: hidden;
-  transition: background 400ms;
-
   text-decoration: none;
   background-color: var(--primary-color);
   color: var(--white-color);
@@ -136,10 +135,16 @@ h1 {
   text-align: center;
   cursor: pointer;
   border: none;
+  transition: all 0.2s;
 }
 
 .btn:hover {
   background-color: var(--primary-color-2) !important;
+  transform: scale(1.1);
+}
+
+.btn:active {
+  transform: scale(0.9);
 }
 
 .prev-next-container {
@@ -152,20 +157,4 @@ h1 {
 #error-message {
   color: red;
   justify-self: center;
-}
-
-/* Ripple effect */
-span.ripple {
-  position: absolute;
-  border-radius: 50%;
-  transform: scale(0);
-  animation: ripple 300ms linear;
-  background-color: var(--primary-color-dark);
-}
-
-@keyframes ripple {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
 }

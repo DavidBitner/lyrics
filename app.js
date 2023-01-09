@@ -2,45 +2,69 @@ const form = document.querySelector(`#form`);
 const searchInput = document.querySelector(`#search-input`);
 const musicContainer = document.querySelector(`.music-container`);
 const prevNext = document.querySelector(`.prev-next-container`);
+const container = document.querySelector(`.container`);
 
-async function getData(search) {
-  const apiURL = `https://api.lyrics.ovh/suggest/${search}`;
-  let response = await fetch(apiURL);
+const apiURL = "https://api.lyrics.ovh";
+
+let prev = "";
+let next = "";
+
+async function getMoreSongs(url) {
+  let response = await fetch(`https://cors-anywhere.herokuapp.com/${url}`);
   let data = await response.json();
-  return data;
+
+  showSongs(data);
 }
 
-getData().then((response) => {
-  console.log(response);
-});
+function showSongs(songsInfo) {
+  musicContainer.innerHTML = songsInfo.data
+    .map(
+      (song) => `
+    <li class="song">
+      <div class="song__artist">${song.artist.name} - </div>
+      <div class="song__name">${song.title}</div>
+      <button class="song__btn btn" data-artist="${song.artist.name}" data-song-title="${song.title}">Lyrics</button>
+    </li>
+  `
+    )
+    .join("");
 
-// Ripple effect
-function create_ripple(event) {
-  const btn = event.currentTarget;
+  next = songsInfo.next;
+  prev = songsInfo.prev;
 
-  const circle = document.createElement("span");
-  const diameter = Math.max(btn.clientWidth, btn.clientHeight);
-  const radius = diameter / 2;
-
-  circle.style.width = circle.style.height = `${diameter}px`;
-  circle.style.left = `${event.clientX - (btn.offsetLeft + radius)}px`;
-  circle.style.top = `${event.clientY - (btn.offsetTop + radius)}px`;
-  circle.classList.add("ripple");
-
-  const ripple = btn.getElementsByClassName("ripple")[0];
-  if (ripple) {
-    ripple.remove();
+  if (songsInfo.prev || songsInfo.next) {
+    prevNext.innerHTML = `
+      ${
+        songsInfo.prev
+          ? `<button class="song__btn btn" id="prev-button">Prev</button>`
+          : ""
+      }
+      ${
+        songsInfo.next
+          ? `<button class="song__btn btn" id="next-button"">Next</button>`
+          : ""
+      }
+    `;
+    return;
   }
 
-  btn.appendChild(circle);
+  prevNext.innerHTML = "";
 }
 
-const btns = document.getElementsByTagName("a");
-for (const btn of btns) {
-  btn.addEventListener("click", create_ripple);
+async function getData(search) {
+  const url = `${apiURL}/suggest/${search}`;
+  let response = await fetch(url);
+  let data = await response.json();
+
+  showSongs(data);
 }
 
-document.querySelector(`#search-btn`).addEventListener("click", create_ripple);
+async function fetchLyrics(artist, songName) {
+  let response = await fetch(`${apiURL}/v1/${artist}/${songName}`);
+  let data = await response.json();
+
+  console.log(data);
+}
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -52,5 +76,22 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
-  console.log(searchTerm);
+  getData(searchTerm);
+});
+
+container.addEventListener("click", (event) => {
+  if (event.target.id == "next-button") {
+    getMoreSongs(next);
+  }
+  if (event.target.id == "prev-button") {
+    getMoreSongs(prev);
+  }
+  if (event.target.classList[0] == "song__btn") {
+    const artist = event.target.getAttribute("data-artist");
+    const songName = event.target.getAttribute("data-song-title");
+
+    console.log(artist, songName);
+
+    fetchLyrics(artist, songName);
+  }
 });
